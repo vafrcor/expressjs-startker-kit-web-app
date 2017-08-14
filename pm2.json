@@ -1,0 +1,11 @@
+{
+	"apps":[
+		{
+			"name":"project-name",
+			"script":"./bin/www",
+			"watch": true,
+			"instances": 2,
+			"exec_mode": "cluster"
+		}
+	]
+}

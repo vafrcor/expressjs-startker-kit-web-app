@@ -1,0 +1,346 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This is a `Gaharu Petal` API Specifications for internal dan campaign use.",
+    "version": "0.0.1",
+    "title": "Gaharu - Petal",
+    "termsOfService": "http://gaharu-middleware.local/",
+    "contact": {
+      "email": "gaharu-support@sepulsa.com"
+    },
+    "license": {
+      "name": "Proprietary",
+      "url": "http://gaharu.sepulsa.com/license"
+    }
+  },
+  "host": "gaharu-petal.sepulsa.id",
+  "basePath": "/api/v1",
+  "tags": [
+    {
+      "name":"Internal",
+      "description":"API End-point used for Gaharu Internal Systems"
+    },
+    {
+      "name":"Campaign",
+      "description":"API End-point used for Gaharu Partner Systems"
+    }
+  ],
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/internal/voucher/redeem":{
+      "post": {
+        "tags": [
+          "Internal"
+        ],
+        "summary": "Reddeem voucher (classic way)",
+        "description": "",
+        "operationId": "internalVoucherRedeem",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "object that need to be send to server",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/InternalClassicRedeemVoucherJson"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Valid response"
+          },
+          "400": {
+            "description": "- Voucher length (6-9).\n- Customer Number length (9-13).\n- Operator Prefix Not Found.\n"
+          },
+          "406": {
+            "description": "- Voucher Code Not Exsist.\n- Voucher Code has been Used.\n- Campaign Not Active.\n- Product Not Available.\n"
+          }
+        },
+        "security": []
+      }
+    },
+    "/internal/operator/{code}":{
+      "get":{
+        "tags": [
+          "Internal"
+        ],
+        "summary": "Detail Telco Operator Data",
+        "description": "",
+        "operationId": "internalOperatorData",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "code",
+            "description": "Telco Operator Code",
+            "required": true,
+            "enum":[
+              "telkomsel",
+              "tri",
+              "indosat",
+              "xl",
+              "axis",
+              "smartfren"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Valid response"
+          },
+          "412": {
+            "description": "Telco Operator Code not found on system."
+          }
+        },
+        "security": []
+      }
+    },
+    "/internal/partner/redeem-page-detail":{
+      "post": {
+        "tags": [
+          "Internal"
+        ],
+        "summary": "Get Partner redeem page details",
+        "description": "",
+        "operationId": "internalRedeemPageDetail",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "object that need to be send to server",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/InternalRedeemPageDetailJson"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Valid response"
+          },
+          "412": {
+            "description": "Partner Id. Not Found."
+          }
+        },
+        "security": []
+      }
+    },
+    "/campaign/internal/voucher/redeem":{
+      "post":{
+        "tags": [
+          "Campaign"
+        ],
+        "summary": "Reddeem voucher (for Internal use only)",
+        "description": "",
+        "operationId": "campaignInternalVoucherRedeem",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "object that need to be send to server",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CampaignInternalRedeemVoucherJson"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Valid response"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "406": {
+            "description": "Unprocessable entity Or Payload and key not matched"
+          }
+        },
+        "security": []
+      }
+    },
+    "/campaign/partner/voucher/redeem":{
+      "post":{
+        "tags": [
+          "Campaign"
+        ],
+        "summary": "Reddeem voucher (for Partner use only)",
+        "description": "",
+        "operationId": "campaignPartnerVoucherRedeem",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "object that need to be send to server",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CampaignPartnerRedeemVoucherJson"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Valid response"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "406": {
+            "description": "Unprocessable entity Or Payload and key not matched"
+          },
+          "422": {
+            "description": "Expire Campaign Period"
+          }
+        },
+        "security": []
+      }
+    },
+    "/campaign/partner-samsung/pulsa.json":{
+      "post":{
+        "tags": [
+          "Campaign"
+        ],
+        "summary": "Reddeem voucher (partner Samsung only!)",
+        "description": "`Attention!` \n\n This request header need to be set as 'application/json' but send request body as 'plain/text'",
+        "operationId": "campaignPartnerSamsungVoucherRedeem",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "plain text that need to be send to server",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CampaignPartnerSamsungRedeemVoucherPlainText"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Valid response"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "422": {
+            "description": "Unprocessable entity"
+          },
+          "500": {
+            "description": "Internal problem from Gaharu system"
+          }
+        },
+        "security": []
+      }
+    }
+  },
+  "securityDefinitions": {},
+  "definitions": {
+    "InternalClassicRedeemVoucherJson":{
+      "type": "object",
+      "required": [
+        "voucher",
+        "customer_number"
+      ],
+      "properties": {
+        "voucher": {
+          "type": "string",
+          "example": "Ow3zgi"
+        },
+        "customer_number": {
+          "type": "string",
+          "example": "081234000001"
+        }
+      }
+    },
+    "InternalRedeemPageDetailJson":{
+      "type": "object",
+      "required": [
+        "partnerid"
+      ],
+      "properties": {
+        "partnerid": {
+          "type": "integer",
+          "format": "int32",
+          "example":15
+        }
+      }
+    },
+    "CampaignInternalRedeemVoucherJson":{
+      "type": "object",
+      "required": [
+        "sign_data",
+        "partner_id"
+      ],
+      "properties": {
+        "sign_data": {
+          "type": "string",
+          "example": "eyJjdCI6IjVSSlFTTkg0b2c3azBTaE1EZGszYTZ3ZUdublorbkZsYWhJbXJydHR1Mlo3S0lsMTcyL2lseUEzS2ZBNzNkZkM0VnQxbmcwZjM1TEppLy90MnpYK053PT0iLCJpdiI6Ijk2MDBjZDg3OTI4NjliYjI3YWQ2ZmM1NTc2NWI2MjA3IiwicyI6ImFmMTE0Y2U5ZDE2ZWQ2MmMifQ=="
+        },
+        "partner_id": {
+          "type": "integer",
+          "format": "int32",
+          "example": 15
+        }
+      }
+    },
+    "CampaignPartnerRedeemVoucherJson":{
+      "type": "object",
+      "required": [
+        "sign_data",
+        "partner_id"
+      ],
+      "properties": {
+        "sign_data": {
+          "type": "string",
+          "example": "eyJjdCI6IjVSSlFTTkg0b2c3azBTaE1EZGszYTZ3ZUdublorbkZsYWhJbXJydHR1Mlo3S0lsMTcyL2lseUEzS2ZBNzNkZkM0VnQxbmcwZjM1TEppLy90MnpYK053PT0iLCJpdiI6Ijk2MDBjZDg3OTI4NjliYjI3YWQ2ZmM1NTc2NWI2MjA3IiwicyI6ImFmMTE0Y2U5ZDE2ZWQ2MmMifQ=="
+        },
+        "partner_id": {
+          "type": "integer",
+          "format": "int32",
+          "example":15
+        }
+      }
+    },
+    "CampaignPartnerSamsungRedeemVoucherPlainText":{
+      "type":"string",
+      "example":"91jb89ti8/1ly/G+CmjFp1ibwyehuDoDm6rF/VBzRHiT7eM8VyVX0gOxYjAusVeogI5fXGXFuviArofoi/KclP+3VzNrw5vOrSW/eltjRVfvULBG77R1iPGfswkitpgw+cBH3hlE+QgjI2zOt263QPWPtScvXu/mwF+pKxrefAtKnZbNP87TFMGe/n9hJOgrihNAiVaDSpOKbTU4NwEix7PrD/Ff9BlwPUooLUKfcI/8mK7l895dj2hBmb9H7XUG2wIEmq6YWyP+hUJQS2U0BmP4hJUuxmKOTyHWIemN4DjJzII3nCFSOkCjdTg73M7jVaKWIOAZGlw6XSby0ClHlBHF3JeanYzn5Xgcf+x95ITTTniuzizyNENEwIJCUcHnmDySCDeDWVAhn5t+c5ouXbRPlf8bNbemcK2v9xKar9P6QowvjQinwwQMfC/slnOZLZqAHc6DVc8WC7xafWQBUGb9Yt12WS32IZsH34PY46UOwPquFcHwic1qkQ6Y8AQmHrw7CZx7yBRUp0UWyMAeDMYhr4D+7V8PagtI7sNLSL1P/PrEjGJLuK6s9uMpwnWk5ELDqe02VLCwxfhiN+xV2gBm9dtMK6OBPwsn2UphQBMIyhgYtUFKM+CDg23EO07fwRhwvo6eFQzExIccD/ViOzLH0fioa7UZhQ5CzN3wEmA="
+    }
+  },
+  "externalDocs": {
+    "description": "Find out more about Swagger",
+    "url": "http://swagger.io"
+  }
+}

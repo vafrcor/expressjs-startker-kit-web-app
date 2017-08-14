@@ -1,0 +1,4 @@
+/node_modules
+/stress/test/result/*
+.env
+package-lock.json
